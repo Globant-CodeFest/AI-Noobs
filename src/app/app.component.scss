@@ -1,0 +1,66 @@
+.chatbot-content-container {
+  background: url("../assets/bg.png") no-repeat center center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  mat-card {
+    background: rgba($color: #fff, $alpha: 0.8);
+    padding: 20px;
+    &.chat {
+      width: 40%;
+    }
+  }
+  .conversation-list {
+    overflow-y: auto;
+  }
+  .conversation-input {
+    width: 100%;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    input {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #33363f;
+      margin-right: 10px;
+      outline: none;
+      height: 30px;
+    }
+    .panel-actions {
+      width: 150px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 1;
+
+      button {
+        border: 1px solid;
+        width: 48%;
+        border-radius: 8px;
+        &.cancel-changes {
+          border-color: #33363f;
+          color: #33363f;
+          font-weight: normal;
+          margin-right: 10px;
+        }
+        &.save-changes {
+          color: #ffffff;
+          border-color: #33363f;
+          background-color: #33363f;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+#anchor {
+  overflow-anchor: auto;
+  height: 1px;
+}

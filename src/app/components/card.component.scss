@@ -1,0 +1,49 @@
+.card {
+  display: flex;
+}
+
+.card-content {
+  align-items: flex-start;
+  border-radius: 0px 16px 16px 16px;
+  display: flex;
+  max-width: 700px;
+  padding: 16px 10px 6px;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+  position: relative;
+  min-width: 110px;
+  .inner-content {
+    padding-right: 16px;
+  }
+  .date {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    font-size: 8px;
+  }
+}
+
+.card--chatbot .card-content {
+  border: 1px solid black;
+  border-color: #1b90d9;
+  background-color: #ebf8ff;
+}
+
+.card--user {
+  flex-direction: row-reverse;
+  .card-content {
+    border-radius: 16px 0px 16px 16px;
+    border: 1px solid black;
+    border-color: #51a414;
+    background-color: #ebfae0;
+  }
+}
+
+.avatar-container {
+  padding-right: 16px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+}

@@ -1,0 +1,23 @@
+<div
+  @openClose
+  class="card"
+  [class.card--chatbot]="sender === 'chatbot'"
+  [class.card--user]="sender === 'user'"
+>
+  <div class="avatar-container">
+    <img
+      *ngIf="sender === 'chatbot'"
+      src="assets/icons/bot.svg"
+      alt="bot image"
+    />
+    <img
+      *ngIf="sender === 'user'"
+      src="assets/icons/user.svg"
+      alt="user image"
+    />
+  </div>
+  <div class="card-content">
+    <div class="inner-content">{{ content }}</div>
+    <span class="date">{{ options.dateAndTime | date : "medium" }}</span>
+  </div>
+</div>
