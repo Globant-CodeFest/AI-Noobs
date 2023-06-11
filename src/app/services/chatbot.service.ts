@@ -36,7 +36,11 @@ export class ChatbotService {
       ],
       model: 'gpt-3.5-turbo',
     };
-    // return of('Test bot').pipe(delayWhen(() => timer(500)));
+    return of({
+      choices: [
+        { message: { content: 'This an automatic response from Test Bot' } },
+      ],
+    }).pipe(delayWhen(() => timer(500)));
     return this.http.post<any>(`${this.BASE_URL}`, data, {
       headers,
     });

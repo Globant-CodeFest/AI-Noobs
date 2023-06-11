@@ -13,6 +13,7 @@
     &.chat {
       width: 40%;
       margin-right: 20px;
+      min-width: 400px;
     }
   }
   .conversation-list {
@@ -127,6 +128,27 @@
   @keyframes p {
     from {
       --p: 0;
+    }
+  }
+}
+@media only screen and (max-width: 600px) {
+  .chatbot-content-container {
+    flex-direction: column;
+    overflow: auto;
+    mat-card,
+    mat-card.chat {
+      width: 100%;
+      margin: 0 0 20px;
+      min-width: unset;
+      mat-card-content {
+        padding: 0;
+        .pie {
+          --w: 40%;
+          &::after {
+            display: none;
+          }
+        }
+      }
     }
   }
 }
