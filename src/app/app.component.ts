@@ -76,31 +76,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  // submit() {
-  //   if (this.subscription) {
-  //     this.subscription.unsubscribe();
-  //   }
-
-  //   this.answer = '';
-  //   const question = this.text;
-  //   this.createReplyCard(ChatbotSender.user, question, {
-  //     dateAndTime: new Date(),
-  //   });
-  //   this.subscription = this.ChatbotService.getServerSentEvent(
-  //     this.text
-  //   ).subscribe((message) => {
-  //     console.log(message, 'respuesta');
-  //     this.createReplyCard(
-  //       ChatbotSender.chatbot,
-  //       message?.choices[0]?.message?.content,
-  //       {
-  //         dateAndTime: new Date(),
-  //       }
-  //     );
-  //   });
-  //   this.text = '';
-  // }
-
   submitLocal() {
     const version: any = this.text.match(/\d{4}/) || [];
     this.cvsResponse = [];
@@ -125,7 +100,16 @@ export class AppComponent implements OnInit, OnDestroy {
         year: item.year,
       };
     });
-    this.ChatbotService.getServerSentEvent(
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
+    this.answer = '';
+    const question = this.text;
+    this.createReplyCard(ChatbotSender.user, question, {
+      dateAndTime: new Date(),
+    });
+    this.subscription = this.ChatbotService.getServerSentEvent(
       this.text,
       JSON.stringify(this.finalDataResponse)
     ).subscribe((message) => {

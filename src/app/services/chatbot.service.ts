@@ -7,7 +7,7 @@ import { delayWhen } from 'rxjs/operators';
 export class ChatbotService {
   private BASE_URL = `https://api.openai.com/v1/chat/completions`;
   // private openIAKey = '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'; Alex's Key
-  private openIAKey = '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'; // Alejo's Key
+  private openIAKey = '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'; // Mafe's Key
 
   constructor(private http: HttpClient) {}
 
