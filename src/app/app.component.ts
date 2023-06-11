@@ -31,6 +31,8 @@ export class AppComponent implements OnInit, OnDestroy {
   chatbotCards: ComponentRef<ChatbotCardComponent>[] = [];
   chatbotCardsCreated!: ComponentRef<ChatbotCardComponent>;
   subscription!: Subscription;
+  cvsResponse: any = [];
+  finalDataResponse: any = [];
 
   @ViewChild('conversationList') conversationList: any;
 
@@ -74,27 +76,122 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  submit() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  // submit() {
+  //   if (this.subscription) {
+  //     this.subscription.unsubscribe();
+  //   }
 
-    this.answer = '';
-    const question = this.text;
-    this.createReplyCard(ChatbotSender.user, question, {
-      dateAndTime: new Date(),
+  //   this.answer = '';
+  //   const question = this.text;
+  //   this.createReplyCard(ChatbotSender.user, question, {
+  //     dateAndTime: new Date(),
+  //   });
+  //   this.subscription = this.ChatbotService.getServerSentEvent(
+  //     this.text
+  //   ).subscribe((message) => {
+  //     console.log(message, 'respuesta');
+  //     this.createReplyCard(
+  //       ChatbotSender.chatbot,
+  //       message?.choices[0]?.message?.content,
+  //       {
+  //         dateAndTime: new Date(),
+  //       }
+  //     );
+  //   });
+  //   this.text = '';
+  // }
+
+  submitLocal() {
+    const version: any = this.text.match(/\d{4}/) || [];
+    this.cvsResponse = [];
+    const filesToSearch = version.length
+      ? [version[0]?.substring(2)]
+      : [22, 21, 20, 19, 18, 17, 16];
+    filesToSearch.map((year) => {
+      this.getData(year, false);
+      this.getData(year, true);
     });
-    this.subscription = this.ChatbotService.getServerSentEvent(
-      this.text
+    setTimeout(() => {
+      this.transformData(this.cvsResponse);
+    }, 1000);
+  }
+
+  transformData(data: any) {
+    this.finalDataResponse = data.map((item: any) => {
+      return {
+        name: item.long_name,
+        age: item.age,
+        weight: item.weight_kg,
+        year: item.year,
+      };
+    });
+    this.ChatbotService.getServerSentEvent(
+      this.text,
+      JSON.stringify(this.finalDataResponse)
     ).subscribe((message) => {
-      console.log(message, 'respuesta');
-      this.createReplyCard(ChatbotSender.chatbot, message);
+      this.createReplyCard(
+        ChatbotSender.chatbot,
+        message?.choices[0]?.message?.content,
+        {
+          dateAndTime: new Date(),
+        }
+      );
     });
     this.text = '';
   }
 
   clear() {
     this.text = '';
+  }
+
+  getData(year: any = 22, categoria: boolean) {
+    this.ChatbotService.getInfo(year, categoria).subscribe((data) => {
+      const finalData = this.formatCsvData(data).find((item: any) =>
+        this.hasWordMatch(item?.long_name, this.text)
+      );
+      if (finalData) {
+        finalData.year = year;
+        this.cvsResponse.push(finalData);
+        console.log(this.cvsResponse, 'finalData');
+      }
+    });
+  }
+
+  hasWordMatch(a: string, b: string) {
+    if (a && b) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
+      const a_parts = a.split(' ');
+      const b_parts = b.split(' ');
+      const a_length = a_parts.length;
+      const b_length = b_parts.length;
+      let i_a = 0;
+      let i_b = 0;
+      for (i_a = 0; i_a < a_length; i_a += 1) {
+        for (i_b = 0; i_b < b_length; i_b += 1) {
+          if (a_parts[i_a] === b_parts[i_b] && a_parts[i_a].length > 2) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  formatCsvData(data: any) {
+    const lines = data.replace(/"/g, '').replace(/'/g, '').split('\n');
+    const headerValues = lines[0].split(',');
+    const dataValues = lines
+      .splice(1)
+      .map((dataLine: any) => dataLine.split(','));
+    return dataValues.map((rowValues: any) => {
+      let row: any = {};
+      headerValues.forEach((headerValue: any, index: number) => {
+        row[headerValue] = rowValues[index];
+      });
+      return row;
+    });
   }
 
   ngOnDestroy() {

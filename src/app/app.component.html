@@ -1,7 +1,4 @@
 <div class="chatbot-content-container">
-  <mat-card>
-    <mat-card-content>Stats</mat-card-content>
-  </mat-card>
   <mat-card class="chat">
     <mat-card-content>
       <div
@@ -17,16 +14,67 @@
           matInput
           type="text"
           [(ngModel)]="text"
-          (keydown.enter)="submit()"
+          (keydown.enter)="submitLocal()"
           placeholder="Ask Chatbot"
         />
         <div class="panel-actions">
           <button class="cancel-changes" mat-button (click)="clear()">
             CLEAR
           </button>
-          <button class="save-changes" mat-button (click)="submit()">
+          <button class="save-changes" mat-button (click)="submitLocal()">
             SEND
           </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="finalDataResponse.length">
+    <mat-card-content>
+      <h2>{{ finalDataResponse[0].name }}</h2>
+      <!-- <img [src]="finalDataResponse[1].img" alt="finalDataResponse[0].name" /> -->
+      <div class="stats">
+        <div
+          class="pie"
+          style="--p: {{ cvsResponse[0].mentality_aggression }}; --b: 10px"
+        >
+          {{ cvsResponse[0].mentality_aggression }}%
+          <span>Aggression</span>
+        </div>
+        <div
+          class="pie"
+          style="--p: {{
+            cvsResponse[0].mentality_composure
+          }}; --c: darkblue; --b: 10px"
+        >
+          {{ cvsResponse[0].mentality_composure }}%
+          <span>Composure</span>
+        </div>
+        <div
+          class="pie"
+          style="--p: {{
+            cvsResponse[0].mentality_interceptions
+          }}; --c: purple; --b: 10px"
+        >
+          {{ cvsResponse[0].mentality_interceptions }}%
+          <span>Interceptions</span>
+        </div>
+        <div
+          class="pie"
+          style="--p: {{
+            cvsResponse[0].mentality_penalties
+          }}; --c: orange; --b: 10px"
+        >
+          {{ cvsResponse[0].mentality_penalties }}%
+          <span>Penalties</span>
+        </div>
+        <div
+          class="pie"
+          style="--p: {{
+            cvsResponse[0].movement_agility
+          }}; --c: lightgreen; --b: 10px"
+        >
+          {{ cvsResponse[0].movement_agility }}%
+          <span>Agility</span>
         </div>
       </div>
     </mat-card-content>
